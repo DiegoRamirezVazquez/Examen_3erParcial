@@ -2,8 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
+
 const authRoutes = require("./routes/authRoutes");
 const estudianteRoutes = require("./routes/estudianteRoutes");
+const comunidadRoutes = require("./routes/comunidadRoutes");
+const comentarioComunidadRoutes = require("./routes/comentarioComunidadRoutes");
+const reaccionComunidadRoutes = require("./routes/reaccionComunidadRoutes");
 
 const app = express();
 
@@ -19,6 +23,12 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 
 app.use("/api/estudiante", estudianteRoutes);
+
+app.use("/api/comunidad", comunidadRoutes);
+
+app.use("/api/comentarios", comentarioComunidadRoutes);
+
+app.use("/api/reacciones", reaccionComunidadRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({
