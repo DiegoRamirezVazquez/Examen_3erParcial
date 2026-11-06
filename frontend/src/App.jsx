@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   GraduationCap,
   Mail,
@@ -10,6 +9,7 @@ import {
 } from "lucide-react";
 
 import Dashboard from "./pages/Dashboard";
+import LogosCarrusel from "./components/logoCarrusel";
 
 import {
   obtenerCSRF,
@@ -17,6 +17,12 @@ import {
   obtenerPerfil,
   cerrarSesion
 } from "./services/authService";
+
+import {
+  validarCampos,
+  MAX_EMAIL,
+  MAX_PASSWORD
+} from "../../backend/src/utils/Validaciones.js";
 
 import "./App.css";
 
@@ -27,12 +33,33 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [error, setError] = useState("");
+  const [capsLock, setCapsLock] = useState(false);
+
+  // Campos que el usuario ya tocó (para no mostrar errores antes de tiempo).
+  const [touched, setTouched] = useState({ email: false, password: false });
 
   const [authenticated, setAuthenticated] = useState(false);
   const [student, setStudent] = useState(null);
 
   // CSRF permanece únicamente en memoria.
   const [csrfToken, setCsrfToken] = useState("");
+
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  // Errores calculados en cada render a partir de los valores actuales.
+  const errores = validarCampos(email, password);
+  const mostrarError = {
+    email: touched.email && errores.email,
+    password: touched.password && errores.password
+  };
+
+  const marcarTocado = (campo) =>
+    setTouched((prev) => ({ ...prev, [campo]: true }));
+
+  const detectarMayusculas = (e) => {
+    setCapsLock(e.getModifierState && e.getModifierState("CapsLock"));
+  };
 
   // ==========================================
   // RECUPERAR SESIÓN AL CARGAR LA APLICACIÓN
@@ -53,7 +80,6 @@ function App() {
 
         setStudent(datosEstudiante);
         setAuthenticated(true);
-
       } catch {
         setStudent(null);
         setAuthenticated(false);
@@ -71,7 +97,23 @@ function App() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (loading) return; // evita envíos duplicados
+
     setError("");
+
+    // Validar antes de enviar al servidor.
+    setTouched({ email: true, password: true });
+
+    if (errores.email) {
+      emailRef.current?.focus();
+      return;
+    }
+
+    if (errores.password) {
+      passwordRef.current?.focus();
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -79,7 +121,11 @@ function App() {
       const csrf = await obtenerCSRF();
 
       // Autenticar contra nuestro backend.
-      await iniciarSesion(email, password, csrf.csrfToken);
+      await iniciarSesion(
+        email.trim().toLowerCase(),
+        password,
+        csrf.csrfToken
+      );
 
       // Obtener un nuevo CSRF asociado a la sesión.
       const nuevoCSRF = await obtenerCSRF();
@@ -96,7 +142,7 @@ function App() {
       setStudent(datosEstudiante);
       setAuthenticated(true);
       setPassword("");
-
+      setTouched({ email: false, password: false });
     } catch (err) {
       setError(err.message || "No fue posible iniciar sesión.");
     } finally {
@@ -119,7 +165,7 @@ function App() {
       setAuthenticated(false);
       setPassword("");
       setEmail("");
-
+      setTouched({ email: false, password: false });
     } catch (err) {
       setError(err.message || "No se pudo cerrar la sesión.");
     }
@@ -132,11 +178,7 @@ function App() {
   if (checkingSession) {
     return (
       <main className="login-page">
-        <section className="login-container">
-          <div className="login-content">
-            <p>Comprobando sesión...</p>
-          </div>
-        </section>
+        <p className="checking">Comprobando sesión...</p>
       </main>
     );
   }
@@ -146,12 +188,7 @@ function App() {
   // ==========================================
 
   if (authenticated) {
-    return (
-      <Dashboard
-        student={student}
-        onLogout={handleLogout}
-      />
-    );
+    return <Dashboard student={student} onLogout={handleLogout} />;
   }
 
   // ==========================================
@@ -160,138 +197,154 @@ function App() {
 
   return (
     <main className="login-page">
-      <section className="login-container">
-
-        <div className="brand">
-          <div className="brand-icon">
-            <GraduationCap size={30} />
-          </div>
-
-          <div>
-            <h2>Portal Académico</h2>
-            <p>Instituto Tecnológico de Celaya</p>
-          </div>
+      <section className="login-card">
+        {/* Panel izquierdo: carrusel (donde iba el logo del TecNM) */}
+        <div className="logos-container">
+          <LogosCarrusel />
         </div>
 
-        <div className="login-content">
-
-          <div className="welcome-section">
-            <span className="tag">PLATAFORMA ESTUDIANTIL</span>
-
-            <h1>
-              Tu vida académica,
-              <span> en un solo lugar.</span>
-            </h1>
-
-            <p>
-              Accede a tu información académica,
-              consulta tus calificaciones y organiza
-              tu trayectoria estudiantil.
-            </p>
-          </div>
-
-          <form className="login-form" onSubmit={handleLogin}>
-
-            <div className="input-group">
-              <label htmlFor="email">Correo institucional</label>
-
-              <div className="input-wrapper">
-                <Mail size={19} />
-
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="usuario@celaya.tecnm.mx"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="username"
-                  required
-                />
-              </div>
+        {/* Panel derecho: información y formulario originales */}
+        <div className="login-container">
+          <div className="brand">
+            <div className="brand-icon">
+              <GraduationCap size={40} />
             </div>
 
-            <div className="input-group">
-              <label htmlFor="password">Contraseña</label>
+            <div>
+              <h2>Portal Académico</h2>
+              <p>Instituto Tecnológico de Celaya</p>
+            </div>
+          </div>
 
-              <div className="input-wrapper">
-                <Lock size={19} />
+          <div className="login-content">
+            <div className="welcome-section">
+              <span className="tag">PLATAFORMA ESTUDIANTIL</span>
 
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Ingresa tu contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                  required
-                />
+              <h1>
+                Tu vida académica,
+                <span> en un solo lugar.</span>
+              </h1>
+            </div>
 
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label="Mostrar u ocultar contraseña"
+            {/* noValidate: usamos nuestros propios mensajes en lugar de los del navegador */}
+            <form className="login-form" onSubmit={handleLogin} noValidate>
+              <div className="input-group">
+                <div
+                  className={`input-wrapper ${
+                    mostrarError.email ? "invalid" : ""
+                  }`}
                 >
-                  {showPassword
-                    ? <EyeOff size={19} />
-                    : <Eye size={19} />}
-                </button>
+                  <Mail size={19} />
+
+                  <input
+                    ref={emailRef}
+                    id="email"
+                    type="email"
+                    placeholder="usuario@celaya.tecnm.mx"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setError("");
+                    }}
+                    onBlur={() => marcarTocado("email")}
+                    autoComplete="username"
+                    maxLength={MAX_EMAIL + 20}
+                    aria-invalid={Boolean(mostrarError.email)}
+                    aria-describedby={
+                      mostrarError.email ? "email-error" : undefined
+                    }
+                  />
+                </div>
+                <label htmlFor="email">Correo institucional</label>
+                {mostrarError.email && (
+                  <span id="email-error" className="field-error" role="alert">
+                    {errores.email}
+                  </span>
+                )}
               </div>
-            </div>
 
-            {error && (
-              <div className="error-message">
-                {error}
+              <div className="input-group">
+                <div
+                  className={`input-wrapper ${
+                    mostrarError.password ? "invalid" : ""
+                  }`}
+                >
+                  <Lock size={19} />
+
+                  <input
+                    ref={passwordRef}
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Ingresa tu contraseña"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setError("");
+                    }}
+                    onBlur={() => {
+                      marcarTocado("password");
+                      setCapsLock(false);
+                    }}
+                    onKeyUp={detectarMayusculas}
+                    onKeyDown={detectarMayusculas}
+                    autoComplete="current-password"
+                    maxLength={MAX_PASSWORD + 20}
+                    aria-invalid={Boolean(mostrarError.password)}
+                    aria-describedby={
+                      mostrarError.password ? "password-error" : undefined
+                    }
+                  />
+
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label="Mostrar u ocultar contraseña"
+                  >
+                    {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  </button>
+                </div>
+                <label htmlFor="password">Contraseña</label>
+                {mostrarError.password && (
+                  <span
+                    id="password-error"
+                    className="field-error"
+                    role="alert"
+                  >
+                    {errores.password}
+                  </span>
+                )}
+                {capsLock && !mostrarError.password && (
+                  <span className="field-warning">
+                    Bloq Mayús está activado.
+                  </span>
+                )}
               </div>
-            )}
 
-            <button
-              type="submit"
-              className="login-button"
-              disabled={loading}
-            >
-              {loading ? "Verificando..." : "Iniciar sesión"}
-              {!loading && <ArrowRight size={19} />}
-            </button>
+              {error && (
+                <div className="error-message" role="alert">
+                  {error}
+                </div>
+              )}
 
-            <div className="security-note">
-              <Lock size={14} />
-              <span>
-                Acceso seguro mediante cuenta institucional
-              </span>
-            </div>
+              <button type="submit" className="login-button" disabled={loading}>
+                {loading ? "Verificando..." : "Iniciar sesión"}
+                {!loading && <ArrowRight size={19} />}
+              </button>
 
-          </form>
+              <div className="security-note">
+                <Lock size={14} />
+                <span>Acceso seguro mediante cuenta institucional</span>
+              </div>
+            </form>
+          </div>
         </div>
-
-        <footer className="login-footer">
-          <span>TECNOLÓGICO NACIONAL DE MÉXICO</span>
-          <span>© 2026 · Portal Académico</span>
-        </footer>
-
       </section>
 
-      <aside className="visual-panel">
-        <div className="visual-decoration decoration-one"></div>
-        <div className="visual-decoration decoration-two"></div>
-
-        <div className="visual-content">
-          <div className="visual-symbol">
-            <GraduationCap size={65} strokeWidth={1.3} />
-          </div>
-
-          <h2>Tu futuro comienza con conocimiento.</h2>
-
-          <p>
-            Una plataforma diseñada para acompañarte
-            en cada etapa de tu formación profesional.
-          </p>
-
-          <div className="visual-line"></div>
-
-          <span>INSTITUTO TECNOLÓGICO DE CELAYA</span>
-        </div>
-      </aside>
+      <footer className="login-footer">
+        <span>TECNOLÓGICO NACIONAL DE MÉXICO</span>
+        <span>© 2026 · Portal Académico</span>
+      </footer>
     </main>
   );
 }
