@@ -1,15 +1,12 @@
-
 const crypto = require("crypto");
 const pool = require("../config/database");
 
 const DURACION_SESION = 60 * 60 * 1000; // 1 hora
 
-// Genera un identificador aleatorio para la cookie.
 const generarSessionId = () => {
     return crypto.randomBytes(32).toString("base64url");
 };
 
-// Guarda únicamente el hash del identificador.
 const generarHash = (sessionId) => {
     return crypto
         .createHash("sha256")
@@ -17,7 +14,6 @@ const generarHash = (sessionId) => {
         .digest("hex");
 };
 
-// Crea una sesión en Supabase.
 const crearSesion = async ({ userId, encryptedToken, expiresAt }) => {
     const sessionId = generarSessionId();
     const sessionHash = generarHash(sessionId);
@@ -30,20 +26,24 @@ const crearSesion = async ({ userId, encryptedToken, expiresAt }) => {
         )
     );
 
-    if (!Number.isFinite(expiracionSesion.getTime()) ||
-        expiracionSesion <= new Date()) {
+    if (
+        !Number.isFinite(expiracionSesion.getTime()) ||
+        expiracionSesion <= new Date()
+    ) {
         throw new Error("La sesión no tiene una expiración válida");
     }
 
-    await pool.query(
+    const resultado = await pool.query(
         `INSERT INTO public.sesiones
         (session_hash, user_id, encrypted_token, expires_at)
-        VALUES ($1, $2, $3, $4)`,
+        VALUES ($1, $2, $3, $4)
+        RETURNING id`,
         [sessionHash, userId, encryptedToken, expiracionSesion]
     );
 
     return {
         sessionId,
+        sessionDbId: resultado.rows[0].id,
         expiresAt: expiracionSesion
     };
 };
@@ -57,7 +57,7 @@ const obtenerSesion = async (sessionId) => {
     const sessionHash = generarHash(sessionId);
 
     const resultado = await pool.query(
-        `SELECT user_id, encrypted_token, expires_at
+        `SELECT id, user_id, encrypted_token, expires_at
          FROM public.sesiones
          WHERE session_hash = $1
          AND expires_at > NOW()

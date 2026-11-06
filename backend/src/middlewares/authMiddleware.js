@@ -39,6 +39,7 @@ const verificarToken = async (req, res, next) => {
 
         req.token = token;
         req.userId = sesion.user_id;
+        req.sessionDbId = sesion.id;
         req.sessionId = sessionId;
 
         next();

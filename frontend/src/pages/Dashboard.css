@@ -391,3 +391,115 @@
     gap: 7px;
   }
 }
+
+
+/* RESUMEN ACADÉMICO */
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.metric-card {
+  background: #ffffff;
+  border: 1px solid #e3e9f2;
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(30, 60, 100, 0.08);
+}
+
+.metric-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon.blue {
+  background: #e8f0fc;
+  color: #3266a5;
+}
+
+.metric-icon.green {
+  background: #e7f6ee;
+  color: #26945d;
+}
+
+.metric-icon.purple {
+  background: #f0eafd;
+  color: #7954bd;
+}
+
+.metric-icon.orange {
+  background: #fff1df;
+  color: #d88a2d;
+}
+
+.metric-card p {
+  color: #718096;
+  font-size: 13px;
+  margin: 0 0 7px;
+}
+
+.metric-card h3 {
+  color: #173b68;
+  font-size: 23px;
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (max-width: 1000px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 550px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar-nav .nav-link {
+    width: 100%;
+    border: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-nav .nav-link:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: transparent;
+    color: #3266a5;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 22px;
+    padding: 8px 0;
+}
+
+.back-button:hover {
+    color: #173b68;
+}

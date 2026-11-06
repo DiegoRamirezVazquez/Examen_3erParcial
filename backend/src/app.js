@@ -7,7 +7,6 @@ const estudianteRoutes = require("./routes/estudianteRoutes");
 
 const app = express();
 
-// Permitir peticiones desde nuestro frontend
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
@@ -15,10 +14,12 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Rutas de autenticación
 app.use("/api/auth", authRoutes);
+
 app.use("/api/estudiante", estudianteRoutes);
 
-// Comprueba que el servidor funciona
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,

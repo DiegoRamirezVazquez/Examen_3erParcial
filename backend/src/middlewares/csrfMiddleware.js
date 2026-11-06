@@ -6,8 +6,6 @@ const {
 } = doubleCsrf({
     getSecret: () => process.env.CSRF_SECRET,
 
-    // Antes del login identifica al visitante por IP.
-    // Después del login identifica su sesión privada.
     getSessionIdentifier: (req) => {
         return req.cookies?.app_session || req.ip || "anonymous";
     },
