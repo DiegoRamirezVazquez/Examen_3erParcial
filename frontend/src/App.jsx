@@ -188,7 +188,6 @@ function App() {
   // ==========================================
 
   if (authenticated) {
-<<<<<<< HEAD
     return (
       <Dashboard
         student={student}
@@ -196,9 +195,7 @@ function App() {
         csrfToken={csrfToken}
       />
     );
-=======
     return <Dashboard student={student} onLogout={handleLogout} />;
->>>>>>> origin/main
   }
 
   // ==========================================
