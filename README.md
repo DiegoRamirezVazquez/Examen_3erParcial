@@ -21,7 +21,7 @@ https://examen-3erparcial-frontend.onrender.com
 - [Frontend – Render](https://examen-3erparcial-frontend.onrender.com)
 - [Backend – Render](https://examen-3erparcial-backend.onrender.com)
 
-## 📚 Documentación del proyecto
+## Documentación del proyecto
 
 Consulta la documentación técnica de cada componente:
 
