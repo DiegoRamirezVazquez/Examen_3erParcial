@@ -9,17 +9,9 @@ const {
     obtenerKardex,
     obtenerHorarios
 } = require("../controllers/estudianteController");
-
-// Información del estudiante
 router.get("/", verificarToken, obtenerEstudiante);
-
-// Calificaciones
 router.get("/calificaciones", verificarToken, obtenerCalificaciones);
-
-// Kardex
 router.get("/kardex", verificarToken, obtenerKardex);
-
-// Horarios
 router.get("/horarios", verificarToken, obtenerHorarios);
 
 module.exports = router;

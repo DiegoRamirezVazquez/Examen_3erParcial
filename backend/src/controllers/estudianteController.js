@@ -7,7 +7,7 @@ const {
 
 const { manejarErrorSII } = require("../utils/sessionHandler");
 
-// Consultar información del estudiante
+
 const obtenerEstudiante = async (req, res) => {
     try {
         const estudiante = await obtenerEstudianteSII(req.token);
@@ -23,7 +23,7 @@ const obtenerEstudiante = async (req, res) => {
     }
 };
 
-// Consultar calificaciones del estudiante
+
 const obtenerCalificaciones = async (req, res) => {
     try {
         const calificaciones = await obtenerCalificacionesSII(req.token);
@@ -39,7 +39,6 @@ const obtenerCalificaciones = async (req, res) => {
     }
 };
 
-// Consultar Kardex del estudiante
 const obtenerKardex = async (req, res) => {
     try {
         const kardex = await obtenerKardexSII(req.token);
@@ -55,7 +54,6 @@ const obtenerKardex = async (req, res) => {
     }
 };
 
-// NUEVO: Consultar horario del estudiante
 const obtenerHorarios = async (req, res) => {
     try {
         const horarios = await obtenerHorariosSII(req.token);
