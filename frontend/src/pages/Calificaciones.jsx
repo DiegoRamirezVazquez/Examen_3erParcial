@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import "./Calificaciones.css";
+import logoITC from "../../image/logo_itcelaya.png";
 
 function Calificaciones() {
     const [periodos, setPeriodos] = useState([]);
@@ -184,8 +185,8 @@ function Calificaciones() {
                     </p>
                 </div>
 
-                <div className="grades-header-icon" >
-                    <img src="../image/logo_itcelaya.png" className="grades-header-icon-img" />
+                <div className="grades-header-icon">
+                    <img src={logoITC} alt="Logo del Tecnológico de Celaya" className="grades-header-icon-img" />
                 </div>
             </header>
 

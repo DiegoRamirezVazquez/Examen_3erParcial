@@ -14,7 +14,8 @@
   gap: 25px;
   margin-bottom: 30px;
   padding: 30px;
-  background: linear-gradient(135deg, #153e75, #2563a6);
+    background: radial-gradient(ellipse at 50% 0%, #1f1f8c 0%, #11115a 35%, #05051a 70%, #000 100%);
+  box-shadow: 0 15px 20px rgba(210, 231, 212, 0.268);
   border-radius: 18px;
   color: white;
 }
@@ -54,8 +55,9 @@
 
 .community-composer {
   padding: 25px;
-  background: white;
   border: 1px solid #e8edf3;
+    background: radial-gradient(circle,rgba(174, 234, 238, 1) 0%, rgba(148, 187, 233, 1) 100%);
+  border: 0.3pc solid rgba(5, 8, 58, 0.562);
   border-radius: 16px;
   margin-bottom: 30px;
   box-shadow: 0 4px 15px rgba(20, 40, 70, 0.04);
@@ -64,14 +66,22 @@
 .composer-heading h2,
 .feed-heading h2 {
   margin: 0 0 6px;
-  color: #172b4d;
+  color: black;
   font-size: 19px;
+}
+
+.community-feed h2{
+  color: white;
+}
+
+.community-feed .feed-heading p{
+  color: white;
 }
 
 .composer-heading p,
 .feed-heading p {
   margin: 0 0 20px;
-  color: #78869a;
+  color: black;
   font-size: 14px;
 }
 
@@ -112,13 +122,12 @@
   padding: 10px 13px;
   border: 1px solid #dce3ec;
   border-radius: 8px;
-  background: white;
   color: #40516a;
   outline: none;
 }
 
 .character-count {
-  color: #8995a5;
+  color: white;
   font-size: 12px;
 }
 
@@ -127,13 +136,12 @@
   align-items: center;
   gap: 8px;
   padding: 11px 20px;
-  background: #2364a5;
+  background: #0c0d0e;
   color: white;
   border: none;
   border-radius: 9px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .publish-button:hover {
@@ -238,10 +246,11 @@
 
 .publication-card {
   padding: 22px;
-  background: white;
+      background: radial-gradient(ellipse at 50% 0%, #1f1f8c 0%, #11115a 35%, #05051a 70%, #000 100%);
+  box-shadow: 0 15px 20px rgba(210, 231, 212, 0.268);
+  border-radius: 18px;
   border: 1px solid #e8edf3;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(20, 40, 70, 0.035);
+  border-radius: 17px;
 }
 
 .publication-top {
@@ -278,12 +287,12 @@
 }
 
 .publication-author strong {
-  color: #263b58;
+  color: white;
   font-size: 14px;
 }
 
 .publication-author span {
-  color: #8995a5;
+  color:  white;
   font-size: 12px;
 }
 
@@ -299,7 +308,7 @@
 
 .publication-content {
   margin: 20px 0;
-  color: #40516a;
+  color: white;
   font-size: 14px;
   line-height: 1.7;
   white-space: pre-wrap;
@@ -309,7 +318,7 @@
 .publication-footer {
   padding-top: 13px;
   border-top: 1px solid #edf0f4;
-  color: #8290a2;
+  color: black;
   font-size: 12px;
 }
 
@@ -334,7 +343,7 @@
   gap: 8px;
   border: none;
   background: transparent;
-  color: #2867a8;
+  color: white;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -392,7 +401,6 @@
 .comment-body {
   flex: 1;
   min-width: 0;
-  background: #f5f8fc;
   border-radius: 12px;
   padding: 10px 13px;
 }
@@ -406,18 +414,18 @@
 }
 
 .comment-author strong {
-  color: #26384a;
+  color: white;
   font-size: 13px;
 }
 
 .comment-author span {
-  color: #8793a1;
+  color: white;
   font-size: 11px;
 }
 
 .comment-body p {
   margin: 0;
-  color: #465466;
+  color:  white;
   font-size: 13px;
   line-height: 1.5;
   overflow-wrap: anywhere;
