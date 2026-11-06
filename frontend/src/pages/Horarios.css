@@ -1,0 +1,248 @@
+
+.schedule-page {
+    width: 100%;
+    animation: scheduleAppear 0.3s ease;
+}
+
+@keyframes scheduleAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.schedule-subtitle {
+    color: #6483b2;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.schedule-header h1 {
+    color: #183b68;
+    font-size: 28px;
+    margin: 8px 0;
+}
+
+.schedule-header p {
+    color: #71829b;
+    font-size: 14px;
+}
+
+.schedule-header-icon,
+.schedule-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e9f0fc;
+    color: #3266a5;
+    border-radius: 14px;
+    width: 58px;
+    height: 58px;
+}
+
+.schedule-summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    border: 1px solid #e1e8f2;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.schedule-summary span {
+    display: block;
+    color: #71829b;
+    font-size: 13px;
+}
+
+.schedule-summary h2 {
+    color: #183b68;
+    font-size: 25px;
+    margin: 5px 0 0;
+}
+
+.schedule-period {
+    margin-left: auto;
+    text-align: right;
+}
+
+.schedule-period strong {
+    display: block;
+    color: #183b68;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.schedule-container {
+    background: white;
+    border: 1px solid #e1e8f2;
+    border-radius: 13px;
+    overflow: hidden;
+}
+
+.schedule-section-heading {
+    padding: 22px;
+    border-bottom: 1px solid #e8edf4;
+}
+
+.schedule-section-heading h2 {
+    color: #183b68;
+    font-size: 17px;
+    margin: 0 0 7px;
+}
+
+.schedule-section-heading p {
+    color: #8190a8;
+    font-size: 12px;
+    margin: 0;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(150px, 1fr));
+    min-width: 900px;
+}
+
+.schedule-container {
+    overflow-x: auto;
+}
+
+.schedule-day {
+    min-height: 340px;
+    border-right: 1px solid #e8edf4;
+}
+
+.schedule-day:last-child {
+    border-right: none;
+}
+
+.schedule-day-header {
+    background: #f7f9fc;
+    color: #3266a5;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 17px 8px;
+    border-bottom: 1px solid #e8edf4;
+}
+
+.schedule-day-content {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.schedule-class {
+    background: #edf3fd;
+    border-left: 4px solid #5683c5;
+    border-radius: 8px;
+    padding: 13px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.2s ease;
+}
+
+.schedule-class:hover {
+    transform: translateY(-2px);
+}
+
+.schedule-class-name {
+    color: #183b68;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.schedule-class-code {
+    color: #71829b;
+    font-size: 10px;
+}
+
+.schedule-class-detail {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #42658f;
+    font-size: 11px;
+}
+
+.schedule-empty {
+    text-align: center;
+    color: #a0aabd;
+    font-size: 12px;
+    padding: 35px 5px;
+    background: #fafbfd;
+    border-radius: 8px;
+}
+
+.schedule-note {
+    color: #8190a8;
+    font-size: 11px;
+    margin-top: 18px;
+}
+
+.schedule-loading,
+.schedule-error {
+    padding: 55px 20px;
+    text-align: center;
+    color: #71829b;
+}
+
+.schedule-loading p {
+    margin-top: 15px;
+}
+
+.schedule-loading .loading-spinner {
+    animation: scheduleSpin 1s linear infinite;
+}
+
+@keyframes scheduleSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.schedule-error h2 {
+    color: #183b68;
+}
+
+.schedule-error button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 11px 17px;
+    border: none;
+    border-radius: 8px;
+    background: #3266a5;
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .schedule-header h1 {
+        font-size: 23px;
+    }
+
+    .schedule-period {
+        width: 100%;
+        margin-left: 0;
+        text-align: left;
+    }
+}

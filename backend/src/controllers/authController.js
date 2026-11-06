@@ -1,4 +1,3 @@
-
 const {
     loginSII,
     obtenerEstudianteSII
@@ -6,7 +5,8 @@ const {
 
 const {
     crearSesion,
-    eliminarSesion
+    eliminarSesion,
+    obtenerSesion
 } = require("../services/sessionService");
 
 const {
@@ -22,9 +22,8 @@ const {
     generateCsrfToken
 } = require("../middlewares/csrfMiddleware");
 
-// ==========================================
-// INICIAR SESIÓN
-// ==========================================
+const { registrarActividad } = require("../services/bitacoraService");
+
 
 const login = async (req, res) => {
     try {
@@ -37,7 +36,6 @@ const login = async (req, res) => {
             });
         }
 
-        // 1. Consultar al SII desde el backend.
         const respuesta = await loginSII(email, password);
         const token = respuesta?.message?.login?.token;
 
@@ -48,7 +46,6 @@ const login = async (req, res) => {
             });
         }
 
-        // 2. Leer la expiración del JWT.
         const partesToken = token.split(".");
 
         if (partesToken.length !== 3) {
@@ -83,25 +80,32 @@ const login = async (req, res) => {
             });
         }
 
-        // 3. Identificar al estudiante.
-        // Se utiliza el identificador del JWT cuando está disponible.
+
         const userId =
             payload.sub ||
             payload.user_id ||
             payload.numero_control ||
             email;
 
-        // 4. Cifrar el JWT antes de almacenarlo.
         const encryptedToken = cifrarToken(token);
 
-        // 5. Crear la sesión privada en Supabase.
         const sesion = await crearSesion({
             userId: String(userId),
             encryptedToken,
             expiresAt: new Date(expiracion * 1000)
         });
 
-        // 6. Entregar únicamente el identificador de sesión.
+        await registrarActividad({
+            userId: String(userId),
+            sessionDbId: sesion.sessionDbId,
+            evento: "LOGIN",
+            apartado: "Login",
+            descripcion: "El estudiante inició sesión correctamente.",
+            detalles: {
+                resultado: "EXITOSO"
+            }
+        });
+
         const maxAge = sesion.expiresAt.getTime() - Date.now();
 
         res.cookie("app_session", sesion.sessionId, {
@@ -141,15 +145,27 @@ const login = async (req, res) => {
     }
 };
 
-// ==========================================
-// CERRAR SESIÓN
-// ==========================================
-
 const logout = async (req, res) => {
     try {
         const sessionId = req.cookies?.app_session;
 
         if (sessionId) {
+            // Recuperar los datos antes de eliminar la sesión
+            const sesion = await obtenerSesion(sessionId);
+
+            if (sesion) {
+                await registrarActividad({
+                    userId: sesion.user_id,
+                    sessionDbId: sesion.id,
+                    evento: "LOGOUT",
+                    apartado: "Login",
+                    descripcion: "El estudiante cerró su sesión.",
+                    detalles: {
+                        resultado: "EXITOSO"
+                    }
+                });
+            }
+
             await eliminarSesion(sessionId);
         }
 
@@ -177,15 +193,23 @@ const logout = async (req, res) => {
     }
 };
 
-// ==========================================
-// COMPROBAR SESIÓN Y OBTENER PERFIL
-// ==========================================
 
 const me = async (req, res) => {
     try {
-        // El middleware recuperó y descifró el JWT.
-        // El token permanece exclusivamente en el backend.
+
         const estudiante = await obtenerEstudianteSII(req.token);
+
+console.log("TIPO DE PERSONA:", typeof estudiante.data?.persona);
+
+console.log(
+    "LONGITUD DE PERSONA:",
+    estudiante.data?.persona?.length
+);
+
+console.log(
+    "VALOR DE PERSONA:",
+    JSON.stringify(estudiante.data?.persona)
+);
 
         return res.status(200).json({
             success: true,
@@ -203,9 +227,6 @@ const me = async (req, res) => {
     }
 };
 
-// ==========================================
-// GENERAR TOKEN CSRF
-// ==========================================
 
 const obtenerTokenCSRF = (req, res) => {
     const csrfToken = generateCsrfToken(req, res);

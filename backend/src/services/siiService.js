@@ -28,4 +28,49 @@ const obtenerEstudianteSII = async (token) => {
     return response.data;
 };
 
-module.exports = { loginSII , obtenerEstudianteSII };
+const obtenerCalificacionesSII = async (token) => {
+    const response = await siiApi.get(
+        "/api/movil/estudiante/calificaciones",
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+const obtenerKardexSII = async (token) => {
+    const response = await siiApi.get(
+        "/api/movil/estudiante/kardex",
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+const obtenerHorariosSII = async (token) => {
+    const response = await siiApi.get(
+        "/api/movil/estudiante/horarios",
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+module.exports = {
+    loginSII,
+    obtenerEstudianteSII,
+    obtenerCalificacionesSII,
+    obtenerKardexSII,
+    obtenerHorariosSII
+};

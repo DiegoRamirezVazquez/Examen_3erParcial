@@ -34,11 +34,11 @@ const verificarToken = async (req, res, next) => {
             });
         }
 
-        // El JWT se descifra exclusivamente en el backend.
         const token = descifrarToken(sesion.encrypted_token);
 
         req.token = token;
         req.userId = sesion.user_id;
+        req.sessionDbId = sesion.id;
         req.sessionId = sessionId;
 
         next();

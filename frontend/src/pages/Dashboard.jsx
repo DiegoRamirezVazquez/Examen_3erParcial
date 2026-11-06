@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 import {
   GraduationCap,
@@ -8,30 +9,55 @@ import {
   CalendarDays,
   LogOut,
   Bell,
-  ChevronRight
+  ChevronRight,
+  ArrowLeft
 } from "lucide-react";
 
+import Calificaciones from "./Calificaciones";
 import "./Dashboard.css";
+import Kardex from "./Kardex";
+import Horarios from "./Horarios";
+
 
 function Dashboard({ student, onLogout }) {
 
-  // Adaptamos la información que devuelve nuestro backend.
-  const nombre =
-    student?.nombre ||
-    student?.name ||
-    student?.estudiante?.nombre ||
-    "Estudiante";
+  // Controla la pantalla que se encuentra activa.
+  const [vistaActual, setVistaActual] = useState("inicio");
+
+  // Información obtenida del SII.
+  const nombre = student?.persona || "Estudiante";
 
   const matricula =
-    student?.matricula ||
-    student?.no_control ||
-    student?.numero_control ||
-    "Información no disponible";
+    student?.numero_control || "Información no disponible";
 
-  const carrera =
-    student?.carrera ||
-    student?.especialidad ||
-    "Carrera no disponible";
+  const correo =
+    student?.email || "Correo no disponible";
+
+  const semestre =
+    student?.semestre || "No disponible";
+
+  const promedio =
+    student?.promedio_ponderado ?? "No disponible";
+
+  const avance =
+    student?.porcentaje_avance ?? 0;
+
+  const materiasAprobadas =
+    student?.materias_aprobadas ?? 0;
+
+  // Cambiar de pantalla.
+  const cambiarVista = (vista) => {
+    setVistaActual(vista);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
+  // Regresar al inicio.
+  const volverInicio = () => {
+    cambiarVista("inicio");
+  };
 
   return (
     <div className="dashboard">
@@ -54,167 +80,455 @@ function Dashboard({ student, onLogout }) {
 
         <nav className="sidebar-nav">
 
-          <a className="nav-link active" href="#inicio">
+          {/* INICIO */}
+          <button
+            type="button"
+            className={`nav-link ${
+              vistaActual === "inicio" ? "active" : ""
+            }`}
+            onClick={volverInicio}
+          >
             <LayoutDashboard size={19} />
             <span>Inicio</span>
-          </a>
+          </button>
 
-          <a className="nav-link" href="#perfil">
+          {/* PERFIL */}
+          <button
+            type="button"
+            className={`nav-link ${
+              vistaActual === "perfil" ? "active" : ""
+            }`}
+            onClick={() => cambiarVista("perfil")}
+          >
             <UserRound size={19} />
             <span>Mi perfil</span>
-          </a>
+          </button>
 
-          <a className="nav-link" href="#calificaciones">
+          {/* CALIFICACIONES */}
+          <button
+            type="button"
+            className={`nav-link ${
+              vistaActual === "calificaciones" ? "active" : ""
+            }`}
+            onClick={() => cambiarVista("calificaciones")}
+          >
             <BookOpen size={19} />
             <span>Calificaciones</span>
-          </a>
+          </button>
 
-          <a className="nav-link" href="#kardex">
+          {/* KARDEX */}
+          <button
+            type="button"
+            className={`nav-link ${
+              vistaActual === "kardex" ? "active" : ""
+            }`}
+            onClick={() => cambiarVista("kardex")}
+          >
             <ClipboardList size={19} />
             <span>Kardex</span>
-          </a>
+          </button>
 
-          <a className="nav-link" href="#horarios">
+          {/* HORARIOS */}
+          <button
+            type="button"
+            className={`nav-link ${
+              vistaActual === "horarios" ? "active" : ""
+            }`}
+            onClick={() => cambiarVista("horarios")}
+          >
             <CalendarDays size={19} />
             <span>Horarios</span>
-          </a>
+          </button>
 
         </nav>
 
+        {/* CERRAR SESIÓN */}
         <div className="sidebar-bottom">
-          <button className="logout-button" onClick={onLogout}>
+
+          <button
+            type="button"
+            className="logout-button"
+            onClick={onLogout}
+          >
             <LogOut size={19} />
             <span>Cerrar sesión</span>
           </button>
+
         </div>
 
       </aside>
 
       {/* CONTENIDO PRINCIPAL */}
-      <main className="dashboard-main" id="inicio">
+      <main className="dashboard-main">
 
-        <header className="dashboard-header">
+        {/* VISTA DE INICIO */}
+        {vistaActual === "inicio" && (
 
-          <div>
-            <p className="header-subtitle">ESPACIO ESTUDIANTIL</p>
-            <h1>Panel principal</h1>
-          </div>
+          <>
 
-          <button className="notification-button" aria-label="Notificaciones">
-            <Bell size={20} />
-          </button>
+            <header className="dashboard-header">
 
-        </header>
+              <div>
+                <p className="header-subtitle">
+                  ESPACIO ESTUDIANTIL
+                </p>
 
-        {/* BIENVENIDA */}
-        <section className="welcome-card">
+                <h1>Panel principal</h1>
+              </div>
 
-          <div>
-            <span className="welcome-tag">PORTAL ESTUDIANTIL</span>
+              <button
+                className="notification-button"
+                aria-label="Notificaciones"
+              >
+                <Bell size={20} />
+              </button>
 
-            <h2>¡Hola, {nombre}!</h2>
+            </header>
 
-            <p>
-              Bienvenido a tu espacio académico.
-              Aquí podrás consultar y organizar tu información escolar.
-            </p>
-          </div>
+            {/* BIENVENIDA */}
+            <section className="welcome-card">
 
-          <div className="welcome-icon">
-            <GraduationCap size={65} strokeWidth={1.3} />
-          </div>
-
-        </section>
-
-        {/* PERFIL */}
-        <section className="section-container" id="perfil">
-
-          <div className="section-heading">
-            <div>
-              <h2>Mi información</h2>
-              <p>Datos de tu cuenta institucional</p>
-            </div>
-          </div>
-
-          <div className="profile-card">
-
-            <div className="profile-avatar">
-              <UserRound size={30} />
-            </div>
-
-            <div className="profile-information">
-              <h3>{nombre}</h3>
-              <p>Estudiante del Instituto Tecnológico de Celaya</p>
-
-              <div className="profile-details">
-                <span>
-                  <strong>Matrícula:</strong> {matricula}
+              <div>
+                <span className="welcome-tag">
+                  PORTAL ESTUDIANTIL
                 </span>
 
-                <span>
-                  <strong>Carrera:</strong> {carrera}
-                </span>
-              </div>
-            </div>
+                <h2>¡Hola, {nombre}!</h2>
 
-          </div>
-
-        </section>
-
-        {/* ACCESOS ACADÉMICOS */}
-        <section className="section-container">
-
-          <div className="section-heading">
-            <div>
-              <h2>Mi espacio académico</h2>
-              <p>Accede rápidamente a tus servicios escolares</p>
-            </div>
-          </div>
-
-          <div className="academic-grid">
-
-            <article className="academic-card" id="calificaciones">
-              <div className="academic-icon blue">
-                <BookOpen size={25} />
+                <p>
+                  Bienvenido a tu espacio académico.
+                  Aquí podrás consultar y organizar tu
+                  información escolar.
+                </p>
               </div>
 
-              <h3>Calificaciones</h3>
-              <p>Consulta tus resultados académicos.</p>
-
-              <span className="card-link">
-                Consultar <ChevronRight size={16} />
-              </span>
-            </article>
-
-            <article className="academic-card" id="kardex">
-              <div className="academic-icon purple">
-                <ClipboardList size={25} />
+              <div className="welcome-icon">
+                <GraduationCap size={65} strokeWidth={1.3} />
               </div>
 
-              <h3>Kardex</h3>
-              <p>Revisa tu historial académico.</p>
+            </section>
 
-              <span className="card-link">
-                Consultar <ChevronRight size={16} />
-              </span>
-            </article>
+            {/* INFORMACIÓN DEL ESTUDIANTE */}
+            <section className="section-container">
 
-            <article className="academic-card" id="horarios">
-              <div className="academic-icon green">
-                <CalendarDays size={25} />
+              <div className="section-heading">
+                <div>
+                  <h2>Mi información</h2>
+                  <p>Datos de tu cuenta institucional</p>
+                </div>
               </div>
 
-              <h3>Horarios</h3>
-              <p>Organiza tus actividades escolares.</p>
+              <div className="profile-card">
 
-              <span className="card-link">
-                Consultar <ChevronRight size={16} />
-              </span>
-            </article>
+                <div className="profile-avatar">
+                  <UserRound size={30} />
+                </div>
 
-          </div>
+                <div className="profile-information">
 
-        </section>
+                  <h3>{nombre}</h3>
+
+                  <p>
+                    Estudiante del Instituto Tecnológico de Celaya
+                  </p>
+
+                  <div className="profile-details">
+
+                    <span>
+                      <strong>Matrícula:</strong> {matricula}
+                    </span>
+
+                    <span>
+                      <strong>Semestre:</strong> {semestre}
+                    </span>
+
+                    <span>
+                      <strong>Correo:</strong> {correo}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </section>
+
+            {/* RESUMEN ACADÉMICO */}
+            <section className="section-container">
+
+              <div className="section-heading">
+                <div>
+                  <h2>Mi resumen académico</h2>
+                  <p>Indicadores de tu trayectoria escolar</p>
+                </div>
+              </div>
+
+              <div className="metrics-grid">
+
+                {/* PROMEDIO */}
+                <article className="metric-card">
+
+                  <div className="metric-icon blue">
+                    <BookOpen size={23} />
+                  </div>
+
+                  <div>
+                    <p>Promedio ponderado</p>
+
+                    <h3>
+                      {Number.isFinite(Number(promedio))
+                        ? Number(promedio).toFixed(2)
+                        : promedio}
+                    </h3>
+                  </div>
+
+                </article>
+
+                {/* MATERIAS APROBADAS */}
+                <article className="metric-card">
+
+                  <div className="metric-icon green">
+                    <GraduationCap size={23} />
+                  </div>
+
+                  <div>
+                    <p>Materias aprobadas</p>
+                    <h3>{materiasAprobadas}</h3>
+                  </div>
+
+                </article>
+
+                {/* AVANCE */}
+                <article className="metric-card">
+
+                  <div className="metric-icon purple">
+                    <ClipboardList size={23} />
+                  </div>
+
+                  <div>
+                    <p>Avance académico</p>
+                    <h3>{avance}%</h3>
+                  </div>
+
+                </article>
+
+                {/* SEMESTRE */}
+                <article className="metric-card">
+
+                  <div className="metric-icon orange">
+                    <CalendarDays size={23} />
+                  </div>
+
+                  <div>
+                    <p>Semestre actual</p>
+                    <h3>{semestre}</h3>
+                  </div>
+
+                </article>
+
+              </div>
+
+            </section>
+
+            {/* ACCESOS ACADÉMICOS */}
+            <section className="section-container">
+
+              <div className="section-heading">
+                <div>
+                  <h2>Mi espacio académico</h2>
+                  <p>
+                    Accede rápidamente a tus servicios escolares
+                  </p>
+                </div>
+              </div>
+
+              <div className="academic-grid">
+
+                <article
+                  className="academic-card"
+                  onClick={() => cambiarVista("calificaciones")}
+                >
+
+                  <div className="academic-icon blue">
+                    <BookOpen size={25} />
+                  </div>
+
+                  <h3>Calificaciones</h3>
+
+                  <p>
+                    Consulta tus resultados académicos.
+                  </p>
+
+                  <span className="card-link">
+                    Consultar <ChevronRight size={16} />
+                  </span>
+
+                </article>
+
+                <article
+                  className="academic-card"
+                  onClick={() => cambiarVista("kardex")}
+                >
+                  <div className="academic-icon purple">
+                    <ClipboardList size={25} />
+                  </div>
+
+                  <h3>Kardex</h3>
+
+                  <p>
+                    Revisa tu historial académico.
+                  </p>
+
+                  <span className="card-link">
+                    Consultar <ChevronRight size={16} />
+                  </span>
+                </article>
+
+                <article
+  className="academic-card"
+  onClick={() => cambiarVista("horarios")}
+>
+  <div className="academic-icon green">
+    <CalendarDays size={25} />
+  </div>
+
+  <h3>Horarios</h3>
+
+  <p>
+    Consulta tus clases organizadas por día y hora.
+  </p>
+
+  <span className="card-link">
+    Consultar <ChevronRight size={16} />
+  </span>
+</article>
+              </div>
+
+            </section>
+
+          </>
+
+        )}
+
+        {/* VISTA DE PERFIL */}
+        {vistaActual === "perfil" && (
+
+          <>
+
+            <button
+              type="button"
+              className="back-button"
+              onClick={volverInicio}
+            >
+              <ArrowLeft size={17} />
+              Volver al inicio
+            </button>
+
+            <header className="dashboard-header">
+              <div>
+                <p className="header-subtitle">
+                  ESPACIO ESTUDIANTIL
+                </p>
+
+                <h1>Mi perfil</h1>
+              </div>
+            </header>
+
+            <section className="section-container">
+
+              <div className="section-heading">
+                <div>
+                  <h2>Información institucional</h2>
+                  <p>Datos de tu cuenta de estudiante</p>
+                </div>
+              </div>
+
+              <div className="profile-card">
+
+                <div className="profile-avatar">
+                  <UserRound size={30} />
+                </div>
+
+                <div className="profile-information">
+                  <h3>{nombre}</h3>
+
+                  <div className="profile-details">
+
+                    <span>
+                      <strong>Matrícula:</strong> {matricula}
+                    </span>
+
+                    <span>
+                      <strong>Correo:</strong> {correo}
+                    </span>
+
+                    <span>
+                      <strong>Semestre:</strong> {semestre}
+                    </span>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </section>
+
+          </>
+
+        )}
+
+        {/* VISTA DE CALIFICACIONES */}
+        {vistaActual === "calificaciones" && (
+
+          <>
+
+            <button
+              type="button"
+              className="back-button"
+              onClick={volverInicio}
+            >
+              <ArrowLeft size={17} />
+              Volver al inicio
+            </button>
+
+            <Calificaciones />
+
+          </>
+
+        )}
+
+        {/* VISTA DE KARDEX */}
+        {vistaActual === "kardex" && (
+          <>
+            <button
+              type="button"
+              className="back-button"
+              onClick={volverInicio}
+            >
+              <ArrowLeft size={17} />
+              Volver al inicio
+            </button>
+
+            <Kardex />
+          </>
+        )}
+
+        {/* VISTA DE HORARIOS */}
+        {vistaActual === "horarios" && (
+          <>
+            <button
+              type="button"
+              className="back-button"
+              onClick={volverInicio}
+            >
+              <ArrowLeft size={17} />
+              Volver al inicio
+            </button>
+
+            <Horarios />
+          </>
+        )}
 
         <footer className="dashboard-footer">
           Tecnológico Nacional de México · Instituto Tecnológico de Celaya
