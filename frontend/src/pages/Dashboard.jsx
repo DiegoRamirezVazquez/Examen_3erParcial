@@ -15,6 +15,7 @@ import {
 
 import Calificaciones from "./Calificaciones";
 import "./Dashboard.css";
+import LogosCarrusel from "../components/logoCarrusel";
 import Kardex from "./Kardex";
 import Horarios from "./Horarios";
 
@@ -90,18 +91,6 @@ function Dashboard({ student, onLogout }) {
           >
             <LayoutDashboard size={19} />
             <span>Inicio</span>
-          </button>
-
-          {/* PERFIL */}
-          <button
-            type="button"
-            className={`nav-link ${
-              vistaActual === "perfil" ? "active" : ""
-            }`}
-            onClick={() => cambiarVista("perfil")}
-          >
-            <UserRound size={19} />
-            <span>Mi perfil</span>
           </button>
 
           {/* CALIFICACIONES */}
@@ -201,10 +190,11 @@ function Dashboard({ student, onLogout }) {
                   información escolar.
                 </p>
               </div>
-
-              <div className="welcome-icon">
-                <GraduationCap size={65} strokeWidth={1.3} />
-              </div>
+              
+                <div className="carrusel-wrapper">
+                  <LogosCarrusel />
+                </div>
+              
 
             </section>
 
@@ -235,7 +225,7 @@ function Dashboard({ student, onLogout }) {
                   <div className="profile-details">
 
                     <span>
-                      <strong>Matrícula:</strong> {matricula}
+                      <strong>Número de control:</strong> {matricula}
                     </span>
 
                     <span>
@@ -403,73 +393,6 @@ function Dashboard({ student, onLogout }) {
     Consultar <ChevronRight size={16} />
   </span>
 </article>
-              </div>
-
-            </section>
-
-          </>
-
-        )}
-
-        {/* VISTA DE PERFIL */}
-        {vistaActual === "perfil" && (
-
-          <>
-
-            <button
-              type="button"
-              className="back-button"
-              onClick={volverInicio}
-            >
-              <ArrowLeft size={17} />
-              Volver al inicio
-            </button>
-
-            <header className="dashboard-header">
-              <div>
-                <p className="header-subtitle">
-                  ESPACIO ESTUDIANTIL
-                </p>
-
-                <h1>Mi perfil</h1>
-              </div>
-            </header>
-
-            <section className="section-container">
-
-              <div className="section-heading">
-                <div>
-                  <h2>Información institucional</h2>
-                  <p>Datos de tu cuenta de estudiante</p>
-                </div>
-              </div>
-
-              <div className="profile-card">
-
-                <div className="profile-avatar">
-                  <UserRound size={30} />
-                </div>
-
-                <div className="profile-information">
-                  <h3>{nombre}</h3>
-
-                  <div className="profile-details">
-
-                    <span>
-                      <strong>Matrícula:</strong> {matricula}
-                    </span>
-
-                    <span>
-                      <strong>Correo:</strong> {correo}
-                    </span>
-
-                    <span>
-                      <strong>Semestre:</strong> {semestre}
-                    </span>
-
-                  </div>
-                </div>
-
               </div>
 
             </section>

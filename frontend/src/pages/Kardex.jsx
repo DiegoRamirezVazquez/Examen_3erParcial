@@ -117,7 +117,7 @@ function Kardex() {
                     <GraduationCap size={35} />
                 </div>
             </header>
-
+            
             <section className="kardex-summary">
                 <div className="kardex-summary-icon">
                     <ClipboardList size={25} />
@@ -125,6 +125,15 @@ function Kardex() {
                 <div>
                     <span>Materias registradas</span>
                     <h2>{materias.length}</h2>
+                </div>
+            </section>
+            <section className="kardex-summary">
+                <div className="kardex-summary-icon">
+                    <ClipboardList size={25} />
+                </div>
+                <div>
+                    <span>Materias reprobadas</span>
+                    <h2>{materias.filter(m => m.calificacion < 70).length}</h2>
                 </div>
             </section>
 
@@ -206,16 +215,7 @@ function Kardex() {
                     </div>
                 )}
             </section>
-
-            <section className="kardex-legend">
-                <span><i className="legend-dot good"></i> Aprobatoria (70-100)</span>
-                <span><i className="legend-dot warning"></i> En observación (60-69)</span>
-                <span><i className="legend-dot bad"></i> No aprobatoria (0-59)</span>
-                <span>AC: Acreditación especial</span>
-            </section>
-
         </div>
     );
 }
-
 export default Kardex;

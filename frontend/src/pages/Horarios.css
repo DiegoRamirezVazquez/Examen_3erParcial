@@ -23,20 +23,20 @@
 }
 
 .schedule-subtitle {
-    color: #6483b2;
+    color: white;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 1px;
 }
 
 .schedule-header h1 {
-    color: #183b68;
+    color: white;
     font-size: 28px;
     margin: 8px 0;
 }
 
 .schedule-header p {
-    color: #71829b;
+    color:  white;
     font-size: 14px;
 }
 
@@ -56,8 +56,8 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: white;
-    border: 1px solid #e1e8f2;
+    background: radial-gradient(circle,rgba(174, 234, 238, 1) 50%, rgba(148, 187, 233, 1) 100%);
+    border: 0.2pc solid rgba(51, 58, 178, 0.562);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 22px;
@@ -66,8 +66,8 @@
 
 .schedule-summary span {
     display: block;
-    color: #71829b;
-    font-size: 13px;
+    color: #090f17;
+    font-size: 16px;
 }
 
 .schedule-summary h2 {
@@ -83,32 +83,32 @@
 
 .schedule-period strong {
     display: block;
-    color: #183b68;
-    font-size: 14px;
+    color: black;
+    font-size: 16x;
     margin-top: 5px;
 }
 
 .schedule-container {
-    background: white;
-    border: 1px solid #e1e8f2;
+    background: radial-gradient(circle,rgba(174, 234, 238, 1) 50%, rgba(148, 187, 233, 1) 100%);
+    border: 0.2pc solid rgba(51, 58, 178, 0.562);
     border-radius: 13px;
     overflow: hidden;
 }
 
 .schedule-section-heading {
     padding: 22px;
-    border-bottom: 1px solid #e8edf4;
+    border-bottom: 1px solid black;
 }
 
 .schedule-section-heading h2 {
-    color: #183b68;
-    font-size: 17px;
+    color: black;
+    font-size: 22px;
     margin: 0 0 7px;
 }
 
 .schedule-section-heading p {
-    color: #8190a8;
-    font-size: 12px;
+    color: black;
+    font-size: 15px;
     margin: 0;
 }
 
@@ -124,21 +124,18 @@
 
 .schedule-day {
     min-height: 340px;
-    border-right: 1px solid #e8edf4;
+    border-right: 1px solid black;
 }
 
-.schedule-day:last-child {
-    border-right: none;
-}
 
 .schedule-day-header {
-    background: #f7f9fc;
-    color: #3266a5;
+    background: #87cffbbd;
+    color: black;
     text-align: center;
     font-size: 13px;
     font-weight: 700;
     padding: 17px 8px;
-    border-bottom: 1px solid #e8edf4;
+    border-bottom: 1px solid #020202;
 }
 
 .schedule-day-content {
@@ -149,8 +146,8 @@
 }
 
 .schedule-class {
-    background: #edf3fd;
-    border-left: 4px solid #5683c5;
+    background: #888a8b31;
+    border-left: 4px solid #1c3252;
     border-radius: 8px;
     padding: 13px 10px;
     display: flex;
@@ -164,13 +161,13 @@
 }
 
 .schedule-class-name {
-    color: #183b68;
+    color: black;
     font-size: 12px;
     line-height: 1.5;
 }
 
 .schedule-class-code {
-    color: #71829b;
+    color: black;
     font-size: 10px;
 }
 
@@ -178,7 +175,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #42658f;
+    color: black;
     font-size: 11px;
 }
 
@@ -187,7 +184,7 @@
     color: #a0aabd;
     font-size: 12px;
     padding: 35px 5px;
-    background: #fafbfd;
+    background: #62769c;
     border-radius: 8px;
 }
 

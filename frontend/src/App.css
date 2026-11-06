@@ -15,7 +15,7 @@
   box-sizing: border-box;
   background:
     radial-gradient(ellipse at 50% 0%, #1f1f8c 0%, #11115a 35%, #05051a 70%, #000 100%);
-  font-family: "Inter", "Segoe UI", sans-serif;
+  font-family: "Segoe UI", "Arial", "sans-serif";
 }
 
 .checking {
@@ -107,7 +107,6 @@
 
 .welcome-section h1 {
   color: #fff;
-  font-family: "Playfair Display", "Bodoni MT", "Didot", Georgia, "Times New Roman", serif;
   font-weight: 400;
   font-size: clamp(30px, 3.4vw, 46px);
   line-height: 1.1;
@@ -134,7 +133,6 @@
 /* Label debajo del input, como en la imagen */
 .input-group label {
   color: #fff;
-  font-family: Georgia, "Times New Roman", serif;
   font-size: 16px;
 }
 

@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import {
     obtenerCalificaciones,
@@ -185,8 +184,8 @@ function Calificaciones() {
                     </p>
                 </div>
 
-                <div className="grades-header-icon">
-                    <GraduationCap size={35} />
+                <div className="grades-header-icon" >
+                    <img src="../image/logo_itcelaya.png" className="grades-header-icon-img" />
                 </div>
             </header>
 
@@ -229,15 +228,13 @@ function Calificaciones() {
                 </select>
             </section>
 
-            {/* TABLA */}
-            <section className="grades-table-container">
+            {/* TARJETAS DE MATERIAS */}
+            <section className="grades-cards-section">
                 <div className="grades-table-heading">
-                    <div>
-                        <h2>Historial de calificaciones</h2>
-                        <p>
-                            Evaluaciones parciales y calificación final registrada.
-                        </p>
-                    </div>
+                    <h2>Historial de calificaciones</h2>
+                    <p>
+                        Evaluaciones parciales y calificación final registrada.
+                    </p>
                 </div>
 
                 {materiasFiltradas.length === 0 ? (
@@ -245,51 +242,62 @@ function Calificaciones() {
                         No se encontraron materias con esos criterios.
                     </div>
                 ) : (
-                    <div className="grades-table-scroll">
-                        <table className="grades-table">
-                            <thead>
-                                <tr>
-                                    <th>Materia</th>
-                                    <th>Periodo académico</th>
-                                    <th>Evaluaciones</th>
-                                    <th>Última evaluación</th>
-                                    <th>Calificación final</th>
-                                </tr>
-                            </thead>
+                    <div className="grades-cards">
+                        {materiasFiltradas.map(materia => (
+                            <article className="subject-card" key={materia.id}>
 
-                            <tbody>
-                                {materiasFiltradas.map(materia => (
-                                    <tr key={materia.id}>
-                                        <td>
-                                            <strong>{materia.nombre}</strong>
+                                {/* Materia */}
+                                <header className="subject-card-header">
+                                    <h3>{materia.nombre}</h3>
 
-                                            <span className="subject-code">
-                                                {materia.clave} · Grupo {materia.grupo}
-                                            </span>
-                                        </td>
+                                    <span className="subject-code">
+                                        {materia.clave} · Grupo {materia.grupo}
+                                    </span>
+                                </header>
 
-                                        <td>
-                                            {materia.periodo}
-                                        </td>
+                                {/* Periodo académico */}
+                                <div className="subject-field">
+                                    <span className="subject-label">
+                                        Periodo académico
+                                    </span>
 
-                                        <td>
-                                            <div className="evaluation-list">
-                                                {materia.evaluaciones.map(
-                                                    evaluacion => (
-                                                        <span
-                                                            key={evaluacion.id_calificacion}
-                                                            className={`grade-badge ${obtenerDesempeno(evaluacion.calificacion)}`}
-                                                            title={`Evaluación ${evaluacion.numero_calificacion}`}
-                                                        >
-                                                            E{evaluacion.numero_calificacion}:{" "}
-                                                            {evaluacion.calificacion ?? "Pendiente"}
-                                                        </span>
-                                                    )
-                                                )}
-                                            </div>
-                                        </td>
+                                    <div className="subject-value">
+                                        {materia.periodo}
+                                    </div>
+                                </div>
 
-                                        <td>
+                                {/* Evaluaciones */}
+                                <div className="subject-field">
+                                    <span className="subject-label">
+                                        Evaluaciones
+                                    </span>
+
+                                    <div className="subject-value">
+                                        <div className="evaluation-list">
+                                            {materia.evaluaciones.map(
+                                                evaluacion => (
+                                                    <span
+                                                        key={evaluacion.id_calificacion}
+                                                        className={`grade-badge ${obtenerDesempeno(evaluacion.calificacion)}`}
+                                                        title={`Evaluación ${evaluacion.numero_calificacion}`}
+                                                    >
+                                                        E{evaluacion.numero_calificacion}:{" "}
+                                                        {evaluacion.calificacion ?? "Pendiente"}
+                                                    </span>
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Última evaluación y calificación final */}
+                                <div className="subject-grades">
+                                    <div className="subject-field">
+                                        <span className="subject-label">
+                                            Última evaluación
+                                        </span>
+
+                                        <div className="subject-value subject-grade">
                                             {materia.ultimaEvaluacion ? (
                                                 <span
                                                     className={`grade-badge ${obtenerDesempeno(materia.ultimaEvaluacion.calificacion)}`}
@@ -301,9 +309,15 @@ function Calificaciones() {
                                                     Sin registro
                                                 </span>
                                             )}
-                                        </td>
+                                        </div>
+                                    </div>
 
-                                        <td>
+                                    <div className="subject-field">
+                                        <span className="subject-label">
+                                            Calificación final
+                                        </span>
+
+                                        <div className="subject-value subject-grade">
                                             {materia.calificacionFinal !== null ? (
                                                 <span
                                                     className={`grade-badge ${obtenerDesempeno(materia.calificacionFinal)}`}
@@ -316,29 +330,15 @@ function Calificaciones() {
                                                     Sin registro
                                                 </span>
                                             )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </article>
+                        ))}
                     </div>
                 )}
             </section>
-
-            {/* LEYENDA */}
-            <section className="grades-legend">
-                <span><i className="legend-dot good"></i> Aprobatoria (70-100)</span>
-                <span><i className="legend-dot warning"></i> En observación (60-69)</span>
-                <span><i className="legend-dot bad"></i> No aprobatoria (0-59)</span>
-                <span><i className="legend-dot pending"></i> Pendiente</span>
-                <span>AC: Acreditación especial</span>
-            </section>
-
-            <p className="grades-note">
-                La calificación final se obtiene del Kardex institucional.
-                La última evaluación corresponde al registro parcial más reciente.
-            </p>
-
         </div>
     );
 }
