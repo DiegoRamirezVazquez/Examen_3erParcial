@@ -24,7 +24,7 @@ const {
 
 const {
     registrarActividad
-} = require("../services/actividadService");
+} = require("../services/bitacoraService");
 
 const {
     guardarPerfilComunidad
