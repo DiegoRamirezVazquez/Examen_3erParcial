@@ -1,4 +1,4 @@
-# 🎓 Sistema de Gestión Estudiantil
+# Sistema de Gestión Estudiantil
 
 Aplicación web desarrollada para facilitar el acceso de los estudiantes a su información académica y ofrecer un espacio de interacción dentro de la comunidad estudiantil.
 
