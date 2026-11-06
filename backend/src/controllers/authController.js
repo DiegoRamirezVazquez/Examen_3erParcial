@@ -22,7 +22,17 @@ const {
     generateCsrfToken
 } = require("../middlewares/csrfMiddleware");
 
-const { registrarActividad } = require("../services/bitacoraService");
+const {
+    registrarActividad
+} = require("../services/actividadService");
+
+const {
+    guardarPerfilComunidad
+} = require("../services/perfilComunidadService");
+
+const {
+    guardarFotoPerfil
+} = require("../services/fotoComunidadService");
 
 
 const login = async (req, res) => {
@@ -196,20 +206,42 @@ const logout = async (req, res) => {
 
 const me = async (req, res) => {
     try {
-
         const estudiante = await obtenerEstudianteSII(req.token);
 
-console.log("TIPO DE PERSONA:", typeof estudiante.data?.persona);
+        // Obtener los datos reales del estudiante
+        const datosEstudiante = estudiante?.data;
 
-console.log(
-    "LONGITUD DE PERSONA:",
-    estudiante.data?.persona?.length
-);
+        if (
+            datosEstudiante?.persona &&
+            datosEstudiante?.numero_control
+        ) {
+            let fotoUrl = null;
 
-console.log(
-    "VALOR DE PERSONA:",
-    JSON.stringify(estudiante.data?.persona)
-);
+            const perfilActual = await guardarPerfilComunidad({
+                userId: String(req.userId),
+                nombre: String(datosEstudiante.persona).trim(),
+                matricula: String(datosEstudiante.numero_control).trim()
+            });
+
+            // Subir fotografía solamente si todavía no existe
+            if (!perfilActual.foto_url && datosEstudiante.foto) {
+                fotoUrl = await guardarFotoPerfil({
+                    userId: String(req.userId),
+                    fotoBase64: datosEstudiante.foto
+                });
+
+                await guardarPerfilComunidad({
+                    userId: String(req.userId),
+                    nombre: String(datosEstudiante.persona).trim(),
+                    matricula: String(datosEstudiante.numero_control).trim(),
+                    fotoUrl
+                });
+            }
+
+            console.log("Perfil de comunidad guardado:", perfilActual.user_id);
+        } else {
+            console.error("El SII no devolvió los datos necesarios para el perfil.");
+        }
 
         return res.status(200).json({
             success: true,

@@ -150,6 +150,7 @@ function App() {
       <Dashboard
         student={student}
         onLogout={handleLogout}
+        csrfToken={csrfToken}
       />
     );
   }

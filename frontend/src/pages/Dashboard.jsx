@@ -10,16 +10,18 @@ import {
   LogOut,
   Bell,
   ChevronRight,
-  ArrowLeft
+  ArrowLeft,
+  Users
 } from "lucide-react";
 
 import Calificaciones from "./Calificaciones";
 import "./Dashboard.css";
 import Kardex from "./Kardex";
 import Horarios from "./Horarios";
+import Comunidad from "./Comunidad";
 
 
-function Dashboard({ student, onLogout }) {
+function Dashboard({ student, onLogout , csrfToken }) {
 
   // Controla la pantalla que se encuentra activa.
   const [vistaActual, setVistaActual] = useState("inicio");
@@ -138,6 +140,18 @@ function Dashboard({ student, onLogout }) {
           >
             <CalendarDays size={19} />
             <span>Horarios</span>
+          </button>
+
+          {/* COMUNIDAD ESTUDIANTIL */}
+          <button
+            type="button"
+            className={`nav-link ${
+              vistaActual === "comunidad" ? "active" : ""
+            }`}
+            onClick={() => cambiarVista("comunidad")}
+          >
+            <Users size={19} />
+            <span>Comunidad estudiantil</span>
           </button>
 
         </nav>
@@ -529,6 +543,22 @@ function Dashboard({ student, onLogout }) {
             <Horarios />
           </>
         )}
+
+        {/* VISTA DE COMUNIDAD */}
+{vistaActual === "comunidad" && (
+  <>
+    <button
+      type="button"
+      className="back-button"
+      onClick={volverInicio}
+    >
+      <ArrowLeft size={17} />
+      Volver al inicio
+    </button>
+
+    <Comunidad csrfToken={csrfToken} />
+  </>
+)}
 
         <footer className="dashboard-footer">
           Tecnológico Nacional de México · Instituto Tecnológico de Celaya
