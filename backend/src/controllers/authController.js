@@ -111,7 +111,7 @@ const login = async (req, res) => {
         res.cookie("app_session", sesion.sessionId, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             path: "/",
             maxAge
         });
@@ -174,7 +174,7 @@ const logout = async (req, res) => {
         res.clearCookie("csrf_token", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             path: "/"
         });
 
